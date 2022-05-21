@@ -1,0 +1,70 @@
+<!doctype html>
+<html>
+<head>
+<style>
+body {
+background-image: url({{ url_for('static', filename='images/6.jpg') }});
+  background-repeat: no-repeat;
+  background-attachment: fixed;  
+  background-size: cover;
+}
+</style>
+</head>
+<body>
+
+
+
+<title>Disease Detection</title>
+  <style>
+        h3{text-align: center;}
+    </style>
+<h3>Welcome to Plant Disease Detection System</h3>
+<h4>Please Upload the image of Leaf</h4>
+<p>
+	{% with messages = get_flashed_messages() %}
+	  {% if messages %}
+		<ul>
+		{% for message in messages %}
+		  <li>{{ message }}</li>
+		{% endfor %}
+		</ul>
+	  {% endif %}
+	{% endwith %}
+</p>
+{% if filename %}
+	<div>
+		<img src="{{ url_for('display_image', filename=filename) }}",  width="300" , height="150">
+		<p>Probability that the leaf is healthy = {{dic['Healthy']}}</p>
+		<p>Probability that the leaf is effected by Multiple Disease = {{dic['Multiple Disease']}}</p>
+		<p>Probability that the leaf is effected by Rust = {{dic['Rust']}}</p>
+		<p>Probability that the leaf is effected by Scab = {{dic['Scab']}}</p>
+	</div>
+{% endif %}
+<form method="post" action="/" enctype="multipart/form-data">
+    <dl>
+		<p>
+			<input type="file" name="file" autocomplete="off" required>
+		</p>
+    </dl>
+    <p>
+		<input type="submit" value="Submit">
+	</p>
+</form>
+
+<h4>Enter the Filepath, which consist of all the leaf images, to check the model score on it.</h4>
+
+<form action="/" method="POST">
+    <label for="filepath">File Path</label>
+        <textarea name="filepath" rows="1" cols="40"></textarea>
+        <br>
+        <input type="submit" value="Submit">
+</form>
+
+{% if score %}
+    <div>
+        <p>The AUC Score is = {{score}}</p>
+    </div>
+{% endif %}
+
+</body>
+</html>
